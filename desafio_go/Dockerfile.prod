@@ -1,0 +1,15 @@
+FROM golang:1.18 AS builder
+
+WORKDIR /usr/src/app
+
+RUN apt-get update &&\
+    apt-get install golang -y
+
+COPY fullcycle.go .
+RUN go build fullcycle.go
+
+FROM hello-world:latest
+WORKDIR /usr/src/app
+COPY --from=builder /usr/src/app/fullcycle .
+
+CMD ["./fullcycle"]
