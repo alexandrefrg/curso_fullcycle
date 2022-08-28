@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      context: nginx
+    image: alexandrefrg/container_nginx:latest
+    container_name: nginx
+    entrypoint: dockerize -wait tcp://app:80 -timeout 20s
+    networks:
+      - node-nginx-network
+    ports:
+      - "8080:80"
+    command: ['nginx','-g','daemon off;']
+    depends_on:
+      - app
+  app:
+    build:
+      context: node
+    image: alexandrefrg/container_node:latest
+    container_name: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh
+    networks:
+      - node-nginx-network
+      - node-mysql-network
+    volumes:
+      - ./node:/usr/src/app
+    tty: true
+    command: ['npm','run','dev']
+    depends_on:
+      - db
+  db:
+    build:
+      context: db
+    image: alexandrefrg/container_db:latest
+    container_name: db
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    restart: always
+    networks:
+      - node-mysql-network
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+    tty: true
+    command: ['--innodb-use-native-aio=0']
+networks:
+  node-mysql-network:
+    name: node-mysql-network
+    driver: bridge
+  node-nginx-network:
+    name: node-nginx-network
+    driver: bridge
