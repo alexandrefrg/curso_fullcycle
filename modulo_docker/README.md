@@ -1,5 +1,6 @@
-# Desafios Docker
+# Módulo Docker
 ## Repositório referente ao Módulo de docker do curso FullCycle 3.0
+### Desafios Docker
 
 #### Para testar o desafio 1 (Desafio Go) basta entrar na pasta `desafio_go` e executar o seguinte comando:
 ```docker
