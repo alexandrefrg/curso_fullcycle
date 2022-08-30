@@ -20,11 +20,5 @@ RUN php composer.phar create-project laminas-api-tools/api-tools-skeleton --igno
 RUN touch /var/www/api-tools-skeleton/test.sqlite
 RUN sqlite3 test.sqlite 'create table users (id int, name varchar(255), email varchar(255));'
 
-# exposing port for laminas api
-EXPOSE 8080
-
-# default entry point
-ENTRYPOINT [ "docker-php-entrypoint" ]
-
 # running cmd to starting serving api
 CMD [ "php", "-S", "0.0.0.0:8080", "-t", "/var/www/api-tools-skeleton/public", "/var/www/api-tools-skeleton/public/index.php"]
