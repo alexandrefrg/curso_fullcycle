@@ -3,8 +3,8 @@ version: '3'
 services:
   app:
     build: .
+    container_name: grpc
     ports:
       - 50021:50021
     volumes:
       - .:/go/src
-  
