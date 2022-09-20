@@ -13,7 +13,7 @@ type Course {
   chapters: [Chapter!]
 }
 
-type Chapters {
+type Chapter {
   id: ID!
   name: String!
   course: Course!
