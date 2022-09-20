@@ -1,4 +1,4 @@
-# curso_fullcycle
+# Curso Fullcycle 3.0
 Repo com assuntos abordados no curso FullCycle 3.0
 
 ### 1)Módulo de Docker
