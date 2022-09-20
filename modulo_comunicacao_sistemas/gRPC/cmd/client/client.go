@@ -21,7 +21,8 @@ func main() {
 	client := pb.NewUserServiceClient(connection)
 	// AddUser(client)
 	// AddUserVerbose(client)
-	AddUsers(client)
+	// AddUsers(client)
+	AddUserStreamBoth(client)
 }
 
 func AddUser(client pb.UserServiceClient) {
@@ -114,4 +115,71 @@ func AddUsers(client pb.UserServiceClient) {
 	}
 
 	fmt.Println(res)
+}
+
+func AddUserStreamBoth(client pb.UserServiceClient) {
+	stream, err := client.AddUserStreamBoth(context.Background())
+	if err != nil {
+		log.Fatalf("Error creating request: %v", err)
+	}
+	reqs := []*pb.User{
+		&pb.User{
+			Id:    "a1",
+			Name:  "Alexandre primeiro",
+			Email: "alexandre@primeiro.com",
+		},
+		&pb.User{
+			Id:    "a2",
+			Name:  "Alexandre segundo",
+			Email: "alexandre@segundo.com",
+		},
+		&pb.User{
+			Id:    "a3",
+			Name:  "Alexandre terceiro",
+			Email: "alexandre@terceiro.com",
+		},
+		&pb.User{
+			Id:    "z1",
+			Name:  "zezinho primeiro",
+			Email: "zezinho@primeiro.com",
+		},
+		&pb.User{
+			Id:    "z2",
+			Name:  "zezinho segundo",
+			Email: "zezinho@segundo.com",
+		},
+		&pb.User{
+			Id:    "z3",
+			Name:  "zezinho terceiro",
+			Email: "zezinho@terceiro.com",
+		},
+	}
+
+	wait := make(chan int)
+
+	go func() {
+		for _, req := range reqs {
+			fmt.Println("Sending user: ", req.Name)
+			stream.Send(req)
+			time.Sleep(time.Second * 2)
+		}
+		stream.CloseSend()
+	}()
+
+	go func() {
+		for {
+			res, err := stream.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("Error receiving data: %v", err)
+				break
+			}
+			fmt.Printf("Receiving user %v with status: %v\n", res.GetUser().GetName(), res.GetStatus())
+		}
+		close(wait)
+	}()
+
+	<-wait
 }
