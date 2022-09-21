@@ -13,11 +13,27 @@ import (
 )
 
 func (r *categoryResolver) Courses(ctx context.Context, obj *model.Category) ([]*model.Course, error) {
-	panic(fmt.Errorf("not implemented"))
+	var courses []*model.Course
+
+	for _, v := range r.Resolver.Courses {
+		if v.Category.ID == obj.ID {
+			courses = append(courses, v)
+		}
+	}
+
+	return courses, nil
 }
 
 func (r *courseResolver) Chapters(ctx context.Context, obj *model.Course) ([]*model.Chapter, error) {
-	panic(fmt.Errorf("not implemented"))
+	var chapters []*model.Chapter
+
+	for _, v := range r.Resolver.Chapters {
+		if v.Course.ID == obj.ID {
+			chapters = append(chapters, v)
+		}
+	}
+
+	return chapters, nil
 }
 
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
