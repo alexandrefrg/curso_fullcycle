@@ -12,6 +12,14 @@ import (
 	"github.com/codeedu/fc2-graphql/graph/model"
 )
 
+func (r *categoryResolver) Courses(ctx context.Context, obj *model.Category) ([]*model.Course, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *courseResolver) Chapters(ctx context.Context, obj *model.Course) ([]*model.Chapter, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) CreateCategory(ctx context.Context, input model.NewCategory) (*model.Category, error) {
 	category := model.Category{
 		ID:          fmt.Sprintf("T%d", rand.Int()),
@@ -75,11 +83,19 @@ func (r *queryResolver) Chapters(ctx context.Context) ([]*model.Chapter, error) 
 	return r.Resolver.Chapters, nil
 }
 
+// Category returns generated.CategoryResolver implementation.
+func (r *Resolver) Category() generated.CategoryResolver { return &categoryResolver{r} }
+
+// Course returns generated.CourseResolver implementation.
+func (r *Resolver) Course() generated.CourseResolver { return &courseResolver{r} }
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+type categoryResolver struct{ *Resolver }
+type courseResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
