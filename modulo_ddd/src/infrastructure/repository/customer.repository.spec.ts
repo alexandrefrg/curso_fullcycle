@@ -26,7 +26,7 @@ describe("Customer repository unit tests", () => {
     const customerRepository = new CustomerRepository();
     const customer = new Customer("c1", "Customer 1");
     const address = new Address("street1", 1, "zip1", "city 1");
-    customer.Address = address;
+    customer.changeAddress(address);
     await customerRepository.create(customer);
 
     const customerModel = await CustomerModel.findOne({ where: { id: "c1" } });
@@ -47,7 +47,7 @@ describe("Customer repository unit tests", () => {
     const customerRepository = new CustomerRepository();
     const customer = new Customer("c1", "Customer 1");
     const address = new Address("street1", 1, "zip1", "city 1");
-    customer.Address = address;
+    customer.changeAddress(address);
     await customerRepository.create(customer);
 
     customer.changeName("Customer 2");
@@ -70,7 +70,7 @@ describe("Customer repository unit tests", () => {
     const customerRepository = new CustomerRepository();
     const customer = new Customer("c1", "Customer 1");
     const address = new Address("street1", 1, "zip1", "city 1");
-    customer.Address = address;
+    customer.changeAddress(address);
     await customerRepository.create(customer);
 
     const foundCustomer = await customerRepository.find(customer.id);
@@ -91,14 +91,14 @@ describe("Customer repository unit tests", () => {
 
     const customer1 = new Customer("c1", "Customer 1");
     const address1 = new Address("street1", 1, "zip1", "city 1");
-    customer1.Address = address1;
+    customer1.changeAddress(address1);
     customer1.addRewardPoints(10);
     customer1.activate();
     await customerRepository.create(customer1);
 
     const customer2 = new Customer("c2", "Customer 2");
     const address2 = new Address("street2", 2, "zip2", "city 2");
-    customer2.Address = address2;
+    customer2.changeAddress(address2);
     customer2.addRewardPoints(20);
     customer2.activate();
     await customerRepository.create(customer2);

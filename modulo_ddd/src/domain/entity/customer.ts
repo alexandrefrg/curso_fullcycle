@@ -25,10 +25,6 @@ export default class Customer {
     return this._rewardPoints;
   }
 
-  set Address(address: Address) {
-    this._address = address;
-  }
-
   get Address(): Address {
     return this._address;
   }
