@@ -17,6 +17,15 @@ export default class OrderItem {
     this._price = price;
     this._productId = productId;
     this._quantity = quantity;
+    this.validate();
+  }
+
+  get quantity(): number {
+    return this._quantity;
+  }
+
+  get price(): number {
+    return this._price;
   }
 
   validate(): boolean {
@@ -36,14 +45,6 @@ export default class OrderItem {
       throw new Error("Quantity must be greater than 0");
     }
     return true;
-  }
-
-  get quantity(): number {
-    return this._quantity;
-  }
-
-  get price(): number {
-    return this._price;
   }
 
   orderItemTotal(): number {
