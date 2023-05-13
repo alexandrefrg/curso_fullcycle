@@ -16,6 +16,10 @@ export default class Address {
     return this._street;
   }
 
+  get number(): number {
+    return this._number;
+  }
+
   get city(): string {
     return this._city;
   }
