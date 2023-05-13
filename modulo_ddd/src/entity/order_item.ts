@@ -20,14 +20,6 @@ export default class OrderItem {
     this.validate();
   }
 
-  get quantity(): number {
-    return this._quantity;
-  }
-
-  get price(): number {
-    return this._price;
-  }
-
   validate(): boolean {
     if (this._id.length === 0) {
       throw new Error("Id is required");
