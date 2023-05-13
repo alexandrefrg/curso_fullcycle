@@ -14,6 +14,14 @@ describe("Order service unti tests", () => {
     expect(order.total()).toBe(10);
   });
 
+  it("should throw an error when item is less than one", () => {
+    expect(() => {
+      const customer = new Customer("c1", "customer1");
+
+      const order = OrderService.placeOrder(customer, []);
+    }).toThrowError("Order must have at least one item");
+  });
+
   it("should get total of all orders", () => {
     const item1 = new OrderItem("i1", "item 1", 100, "p1", 1);
     const item2 = new OrderItem("i2", "item 2", 200, "p2", 2);
