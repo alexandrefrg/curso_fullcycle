@@ -21,10 +21,20 @@ describe("Order unit tests", () => {
   });
 
   it("should calculate total", () => {
-    const item1 = new OrderItem("1", "item_nome", 10);
-    const item2 = new OrderItem("1", "item_nome", 15);
-    const order = new Order("1", "123", [item1, item2]);
+    const item1 = new OrderItem("1", "item_nome", 10, "1", 2);
+    const order1 = new Order("1", "123", [item1]);
+    expect(order1.total()).toBe(20);
 
-    expect(order.total()).toBe(25);
+    const item2 = new OrderItem("1", "item_nome", 15, "2", 2);
+    const order2 = new Order("1", "123", [item1, item2]);
+
+    expect(order2.total()).toBe(50);
+  });
+
+  it("should throw error if the item quantity is less or equal zero", () => {
+    expect(() => {
+      const item = new OrderItem("1", "item_nome", 10, "1", 0);
+      const order = new Order("1", "123", [item]);
+    }).toThrowError("Quantity must be greater than 0");
   });
 });
