@@ -1,9 +1,18 @@
 import Address from "../../domain/entity/address";
 import Customer from "../../domain/entity/customer";
 import CustomerRepositoryInterface from "../../domain/repository/customer-repository.interface";
+import EventDispatcher from "../../event/@shared/event-dispatcher";
+import CustomerAddressChangedEvent from "../../event/customer/customer-address-changed.event";
+import CustomerCreatedEvent from "../../event/customer/customer-created.event";
 import CustomerModel from "../db/sequelize/model/customer.model";
 
 export default class CustomerRepository implements CustomerRepositoryInterface {
+  private _eventDispatcher: EventDispatcher;
+
+  constructor(eventDispatcher: EventDispatcher = new EventDispatcher()) {
+    this._eventDispatcher = eventDispatcher;
+  }
+
   async create(entity: Customer): Promise<void> {
     await CustomerModel.create({
       id: entity.id,
@@ -15,9 +24,12 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
       active: entity.isActive(),
       rewardPoints: entity.rewardPoints,
     });
+    const customerCreatedEvent = new CustomerCreatedEvent({});
+    await this._eventDispatcher.notify(customerCreatedEvent);
   }
 
   async update(entity: Customer): Promise<void> {
+    const beforeChanges = await this.find(entity.id);
     await CustomerModel.update(
       {
         name: entity.name,
@@ -34,6 +46,14 @@ export default class CustomerRepository implements CustomerRepositoryInterface {
         },
       }
     );
+    if (entity.Address !== beforeChanges.Address) {
+      const customerAddressChangedEvent = new CustomerAddressChangedEvent({
+        id: entity.id,
+        name: entity.name,
+        address: `${entity.Address.street}, ${entity.Address.number}, ${entity.Address.city}, ${entity.Address.zip}`,
+      });
+      this._eventDispatcher.notify(customerAddressChangedEvent);
+    }
   }
 
   async find(id: string): Promise<Customer> {
