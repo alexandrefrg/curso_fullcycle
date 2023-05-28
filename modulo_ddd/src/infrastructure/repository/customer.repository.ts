@@ -2,14 +2,17 @@ import Address from "../../domain/entity/address";
 import Customer from "../../domain/entity/customer";
 import CustomerRepositoryInterface from "../../domain/repository/customer-repository.interface";
 import EventDispatcher from "../../event/@shared/event-dispatcher";
+import EventDispatcherInterface from "../../event/@shared/event-dispatcher.interface";
 import CustomerAddressChangedEvent from "../../event/customer/customer-address-changed.event";
 import CustomerCreatedEvent from "../../event/customer/customer-created.event";
 import CustomerModel from "../db/sequelize/model/customer.model";
 
 export default class CustomerRepository implements CustomerRepositoryInterface {
-  private _eventDispatcher: EventDispatcher;
+  private _eventDispatcher: EventDispatcherInterface;
 
-  constructor(eventDispatcher: EventDispatcher = new EventDispatcher()) {
+  constructor(
+    eventDispatcher: EventDispatcherInterface = new EventDispatcher()
+  ) {
     this._eventDispatcher = eventDispatcher;
   }
 
